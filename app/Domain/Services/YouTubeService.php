@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Domain\Services;
 
-use App\Domain\Entities\Country;
 use App\Domain\Entities\Video;
 use App\Domain\ValueObjects\Thumbnail;
 use Google\Client;
+use Google\Exception;
 use Google\Service\YouTube;
 
 class YouTubeService
@@ -22,31 +23,36 @@ class YouTubeService
     /**
      * @param string $countryCode
      * @return array<Video>
-     * @throws \Google\Exception
+     * @throws Exception
      */
     public function getMostPopularVideos(string $countryCode): array
     {
-        $videos =[];
-        $searchResult = $this->youtube->videos->listPopular('snippet', [
+        $videos = [];
+
+        if (strtoupper($countryCode) === 'UK') {
+            $countryCode = 'GB';
+        }
+
+        $searchResult = $this->youtube->videos->listVideos('snippet', [
             'chart' => 'mostPopular',
-            'regionCode' => $countryCode,
+            'regionCode' => strtoupper($countryCode),
             'maxResults' => 10,
         ]);
 
-        foreach ($searchResult->getItems() as $item) {
+        $items = $searchResult->getItems();
+        foreach ($items as $item) {
             $snippet = $item->getSnippet();
             $thumbnail = new Thumbnail(
                 $snippet->getThumbnails()->getDefault()->getUrl(),
                 $snippet->getThumbnails()->getHigh()->getUrl()
             );
-            $videos= new Video(
+            $videos[] = new Video(
                 $item->getId(),
                 $snippet->getTitle(),
                 $snippet->getDescription(),
                 $thumbnail
             );
         }
-
         return $videos;
     }
 }

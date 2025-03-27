@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

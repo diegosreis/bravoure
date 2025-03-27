@@ -1,66 +1,146 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bravoure BE Challenge
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is an implementation of the Bravoure BE Challenge, which involves fetching data from the YouTube and Wikipedia APIs, merging it, and providing it as a JSON response.
 
-## About Laravel
+## Technologies Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Laravel
+* PHP 8.3+
+* Docker / Docker Compose
+* YouTube API
+* Wikipedia API
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Fetches the most popular videos from YouTube API for specified countries (UK, NL, DE, FR, ES, IT, GR). 
+* Fetches initial paragraphs of Wikipedia articles for the same countries.
+* Merges the data from YouTube and Wikipedia for each country.
+* Returns the results in JSON format.
+* Supports pagination, offset, and country filtering.
+* Caching is implemented for performance optimization.
 
-## Learning Laravel
+## Getting Started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* PHP 8.3+
+* Composer
+* MySQL
+* Docker and Docker Compose (if using Docker)
+* YouTube API Key
+    * You'll need to obtain a YouTube API key from the Google Cloud Console.
+* Ensure you have created a database for the application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Installation
 
-## Laravel Sponsors
+1. Clone the repository:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    ```bash
+    git clone <repository_url>
+    cd bravoure-challenge
+    ```
+2. Install PHP dependencies:
 
-### Premium Partners
+    ```bash
+    composer install
+    ```
+3. Copy the environment file:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    ```bash
+    cp .env.example .env
+    ```
+4. Generate the application key:
 
-## Contributing
+    ```bash
+    php artisan key:generate
+    ```
+5. Configure your `.env` file:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=<your_database_name>
+    DB_USERNAME=<your_database_user>
+    DB_PASSWORD=<your_database_password>
+    
+    # Add your YouTube API key
+    YOUTUBE_API_KEY=<your_youtube_api_key>
+    ```
 
-## Code of Conduct
+### Database Setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Run database migrations:
 
-## Security Vulnerabilities
+    ```bash
+    php artisan migrate
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Running the Application
 
-## License
+#### Using PHP Built-in Server
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Start the PHP development server:
+
+    ```bash
+    php artisan serve
+    ```
+2. The application will be accessible at `http://localhost:8000`.
+
+#### Using Docker (Recommended)
+
+1. **Set up Docker:**
+
+    * Ensure Docker and Docker Compose are installed.
+2. **Build and run the Docker containers:**
+
+    ```bash
+    docker compose up -d --build
+    ```
+3. The application will be accessible at `http://localhost:8000`.
+
+### API Endpoints
+
+#### Get Country Data
+
+*`GET /api/countries/{code}`
+*Fetches enriched data for a specific country.
+***Parameters:**
+    * `code` (string, required): The country code (uk, nl, de, fr, es, it, gr).
+    * `offset` (integer, optional): Offset for paginating videos.
+    * `page` (integer, optional): Page number for paginating videos.
+***Example:**
+
+    ```
+    http://localhost:8000/api/countries/uk?offset=0&page=1
+    ```
+
+### Response Format
+
+The API returns a JSON response with the following structure:
+
+```json
+{
+  "code": "uk",
+  "name": "United Kingdom",
+  "wikipedia_paragraph": "...",
+  "videos": [
+    // Array of video objects
+    {
+      "id": "...",
+      "title": "...",
+      "description": "...",
+      "thumbnail": {
+        "normal": "...",
+        "high": "..."
+      }
+    }
+  ],
+  "pagination": {
+    "offset": 0,
+    "page": 1,
+    "total_videos": 100,
+    "per_page": 10,
+    "total_pages": 10
+  }
+}
