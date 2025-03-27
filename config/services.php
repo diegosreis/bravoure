@@ -18,6 +18,10 @@ return [
         'key' => env('YOUTUBE_API_KEY'),
     ],
 
+    'wikipedia' => [
+        'base_url' => 'https://en.wikipedia.org/w/api.php',
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

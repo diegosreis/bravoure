@@ -7,39 +7,36 @@ use Illuminate\Support\Facades\Cache;
 class CountryCacheHandler
 {
     /**
-     * Generates a unique cache key based on the country code, offset, and page.
+     * Generates a unique cache key for a country's enriched data.
      *
      * @param string $countryCode
-     * @param int|null $offset
-     * @param int|null $page
      * @return string
      */
-    public function generateCacheKey(string $countryCode, ?int $offset, ?int $page): string
+    public function generateCountryDataCacheKey(string $countryCode): string
     {
-        return sprintf('country_%s_offset_%s_page_%s', $countryCode, $offset ?? 0, $page ?? 1);
+        return sprintf('country_%s_data', $countryCode);
     }
 
     /**
-     * Attempts to retrieve country data from the cache.
+     * Attempts to retrieve the enriched data for a country from the cache.
      *
      * @param string $cacheKey
      * @return mixed|null
      */
-    public function getCachedData(string $cacheKey): mixed
+    public function getCachedCountryData(string $cacheKey): mixed
     {
         return Cache::get($cacheKey);
     }
 
     /**
-     * Stores the transformed country data in the cache.
+     * Stores the enriched data for a country in the cache.
      *
      * @param string $cacheKey
      * @param array $data
-     * @param int $ttl
      * @return void
      */
-    public function storeCachedData(string $cacheKey, array $data, int $ttl = 3600): void
+    public function storeCachedCountryData(string $cacheKey, array $data): void
     {
-        Cache::put($cacheKey, $data, $ttl);
+        Cache::put($cacheKey, $data, env('CACHE_TTL'));
     }
 }

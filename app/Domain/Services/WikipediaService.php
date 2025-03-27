@@ -11,7 +11,7 @@ class WikipediaService
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => 'https://en.wikipedia.org/w/api.php',
+            'base_uri' => config('services.wikipedia.base_url'),
         ]);
     }
 

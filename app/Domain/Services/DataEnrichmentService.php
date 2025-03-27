@@ -2,6 +2,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\Entities\Country;
+use Google\Exception;
 
 class DataEnrichmentService
 {
@@ -14,10 +15,13 @@ class DataEnrichmentService
         $this->wikipediaService = $wikipediaService;
     }
 
+    /**
+     * @throws Exception
+     */
     public function enrichCountry(Country $country): Country
     {
-        $country->setWikipediaParagraph($this->wikipediaService->getInitialParagraph($country->getName()));
-        $country->setVideos($this->youTubeService->getMostPopularVideos($country->getCode()));
+        $country->wikipediaParagraph = $this->wikipediaService->getInitialParagraph($country->name);
+        $country->videos = $this->youTubeService->getMostPopularVideos($country->code);
         return $country;
     }
 }
