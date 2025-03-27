@@ -85,27 +85,8 @@ This project is an implementation of the Bravoure BE Challenge, which involves f
 
 **Note:** The `.env.example` file already contains the database name, username, and password. You only need to copy the file and set the `YOUTUBE_API_KEY`.
 
-### Database Setup
-
-1.  Run database migrations:
-
-    ```bash
-    php artisan migrate
-    ```
 
 ### Running the Application
-
-#### Using PHP Built-in Server
-
-1.  Start the PHP development server:
-
-    ```bash
-    php artisan serve
-    ```
-
-2.  The application will be accessible at `http://localhost:8000`.
-
-#### Using Docker (Recommended)
 
 1.  **Set up Docker:**
 
