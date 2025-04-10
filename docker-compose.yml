@@ -7,7 +7,9 @@ services:
             - "8000:80"
         container_name: bravoure-app
         volumes:
-            - .:/var/www/html
+            - .:/var/www/html:rw
+            - storage_data:/var/www/html/storage
+            - bootstrap_cache_data:/var/www/html/bootstrap/cache
         depends_on:
             - db
 
@@ -27,3 +29,5 @@ services:
 
 volumes:
     dbdata:
+    storage_data:
+    bootstrap_cache_data:
